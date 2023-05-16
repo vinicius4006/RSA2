@@ -29,6 +29,3 @@ def generate_prime_number(inicio, fim):
         return num_prime
 
 
-a = generate_prime_number(1, 10000)
-print(a)   
-

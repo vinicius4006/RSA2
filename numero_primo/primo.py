@@ -1,4 +1,5 @@
 import math
+import random
 
 def is_prime(num):
     if num <= 1:
@@ -16,5 +17,18 @@ def is_prime(num):
 
     return True
 
-a = is_prime(98764321261)
-print(a)
+
+def generate_prime_number(inicio, fim):
+        stop = True 
+        num_prime = 2
+        while stop:
+             new_num = random.randint(inicio, fim)
+             if is_prime(new_num):
+                  num_prime = new_num
+                  stop = False
+        return num_prime
+
+
+a = generate_prime_number(1, 10000)
+print(a)   
+

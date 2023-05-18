@@ -2,6 +2,7 @@ import math
 import random
 
 def is_prime(num):
+    """ Verifica se um numero é primo"""
     if num <= 1:
         return False
     if num <= 3:

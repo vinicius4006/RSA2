@@ -11,12 +11,10 @@ def co_primos(p: int, q: int, z: int) -> int:
     """Devolve uma lista com os coprimos"""
     b = 1
     coprimos = []
-    while len(coprimos) < z:
+    while count < z:
         res = mdc(z, b)
         if res == 1:
-            coprimos.append(b)
+            count += 1
         b += 1    
             
-    return coprimos
-
-print(co_primos())
+    return count

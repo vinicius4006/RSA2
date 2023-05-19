@@ -8,17 +8,14 @@ def mdc(n1: int, n2: int) -> int:
 
 
 def co_primos(p: int, q: int, z: int) -> int:
-    """Devolve uma lista com os coprimos"""
+    """Devolve um número primo aleatório entre 1 e z que seja coprimo com z"""
     b = 1
     coprimos = []
     while len(coprimos) < z:
         res = mdc(z, b)
-        print(b, '--',res)
         if res == 1:
-            coprimos.append(res)
+            coprimos.append(b)
         b += 1
         
-            
-    
     d = sample(coprimos, 1)
-    return int(d[-1])
+    return int(d[0])

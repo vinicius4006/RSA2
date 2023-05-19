@@ -1,4 +1,5 @@
 from random import sample
+from math import isqrt
 
 def mdc(n1: int, n2: int) -> int:
     """Calcula o mdc usando o algoritmo de Euclides"""
@@ -16,6 +17,7 @@ def co_primos(p: int, q: int, z: int) -> int:
         if res == 1:
             coprimos.append(b)
         b += 1
-        
-    d = sample(coprimos, 1)
+
+    primos = [num for num in coprimos if all(num % i != 0 for i in range(2, isqrt(num) + 1))]
+    d = sample(primos, 1)
     return int(d[0])

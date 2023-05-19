@@ -1,3 +1,4 @@
+import find_NZ.find_n_z as fnz
 
 def mdc(n1: int, n2: int) -> int:
     """Calcula o mdc usando o algoritmo de Euclides"""
@@ -6,7 +7,7 @@ def mdc(n1: int, n2: int) -> int:
     return n1
 
 
-def co_primos(p: int, q: int, z: int) -> list[int]:
+def co_primos(p: int, q: int, z: int) -> int:
     """Devolve uma lista com os coprimos"""
     b = 1
     coprimos = []

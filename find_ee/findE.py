@@ -7,10 +7,10 @@ def euclidean_extended_algorithm(a, b):
         y_new = x - (a // b) * y
         return gcd, x_new, y_new
 
-def find_e(d, z):
+def find_E(d, z):
     _, x, _ = euclidean_extended_algorithm(d, z)
     e = x % z
     return e
         
     
-print(find_e(209, 271))
+print(find_E(209, 271))

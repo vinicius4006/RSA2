@@ -4,8 +4,8 @@ import find_d.Dprimo as fd
 
 
 # Passar um intervalo especifico e tentar encontrar um primo
-P = p.generate_prime_number(15000000, 16000000) # Primeiro intervalo
-Q = p.generate_prime_number(1100000, 5000000) # Segundo intervalo
+P = p.generate_prime_number(7, 23) # Primeiro intervalo
+Q = p.generate_prime_number(11, 50) # Segundo intervalo
 print(P)
 print(Q)
 
@@ -15,5 +15,6 @@ Z = fnz.calculate_Z(P, Q)
 print(N)
 print(Z)
 
-
 # Adquirir D, coprimo de Z
+D = fd.co_primos(P, Q, Z)
+print(D)

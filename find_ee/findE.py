@@ -9,8 +9,8 @@ def euclidean_extended_algorithm(a, b):
 
 def find_e(d, z):
     _, x, _ = euclidean_extended_algorithm(d, z)
-    d = x % z
-    return d
+    e = x % z
+    return e
         
     
-print(find_e(788, 16800))
+print(find_e(209, 271))

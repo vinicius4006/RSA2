@@ -1,4 +1,4 @@
-import find_NZ.find_n_z as fnz
+from random import sample
 
 def mdc(n1: int, n2: int) -> int:
     """Calcula o mdc usando o algoritmo de Euclides"""
@@ -11,10 +11,14 @@ def co_primos(p: int, q: int, z: int) -> int:
     """Devolve uma lista com os coprimos"""
     b = 1
     coprimos = []
-    while count < z:
+    while len(coprimos) < z:
         res = mdc(z, b)
+        print(b, '--',res)
         if res == 1:
-            count += 1
-        b += 1    
+            coprimos.append(res)
+        b += 1
+        
             
-    return count
+    
+    d = sample(coprimos, 1)
+    return int(d[-1])

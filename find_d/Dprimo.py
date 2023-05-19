@@ -19,6 +19,8 @@ def co_primos(p: int, q: int, z: int) -> int:
         b += 1
 
     primos = [num for num in coprimos if all(num % i != 0 for i in range(2, isqrt(num) + 1))]
+    """verifica se o número fornecido pela lista, é primo"""
+
     d = sample(primos, 1)
 
     return int(d[0])

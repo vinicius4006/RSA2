@@ -1,19 +1,22 @@
-def euclidean_extended_algorithm(a, b):
-    if b == 0:
-        return a, 1, 0
-    else:
-        gcd, x, y = euclidean_extended_algorithm(b, a % b)
-        x_new = y
-        y_new = x - (a // b) * y
-        return gcd, x_new, y_new
+import find_NZ.find_n_z as fnz
 
-def find_d(e, p_n):
-    _, x, _ = euclidean_extended_algorithm(e, p_n)
-    d = x % p_n
-    return d
+def mdc(n1: int, n2: int) -> int:
+    """Calcula o mdc usando o algoritmo de Euclides"""
+    while n2:
+        n1, n2 = n2, n1 % n2
+    return n1
 
-# Exemplo de utilização:
-#e = 17  # Valor de E
-#p_n = 80  # Valor de φ(n)
 
-#print("O valor de D que satisfaz a condição é:", d_value)
+def co_primos(p: int, q: int, z: int) -> int:
+    """Devolve uma lista com os coprimos"""
+    b = 1
+    coprimos = []
+    while len(coprimos) < z:
+        res = mdc(z, b)
+        if res == 1:
+            coprimos.append(b)
+        b += 1    
+            
+    return coprimos
+
+print(co_primos())

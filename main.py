@@ -4,8 +4,8 @@ import find_d.Dprimo as fd
 import find_ee.findE as fe
 
 # Passar um intervalo especifico e tentar encontrar um primo
-P = p.generate_prime_number(75, 230) # Primeiro intervalo
-Q = p.generate_prime_number(118, 500) # Segundo intervalo
+P = p.generate_prime_number(10**4, 10**5) # Primeiro intervalo
+Q = p.generate_prime_number(10**4, 10**5) # Segundo intervalo
 print(P)
 print(Q)
 
@@ -33,13 +33,14 @@ def string_to_int(message):
 
 print(string_to_int('Olá, mundo!'))
 
+
 def cifrar(message, E, N):
     
     message = string_to_int(message)
-    cifra = message ** E % N
+    cifra = pow(message, E, N)
     return cifra
 
-message = 'Olá Mundo'    
+message = '8555'    
 cifra = cifrar(message, E, N)
     
 
@@ -50,10 +51,11 @@ def int_to_string(message):
     chunks = [binary[i:i+8] for i in range(0, len(binary), 8)]
     message = ''.join(chr(int(chunk, 2)) for chunk in chunks)
     return message
-    
+
+
 def decifrar(cifra, D, N):
     
-    decifra = cifra ** D % N
+    decifra = pow(cifra, D, N)
     message = int_to_string(decifra)
     return message
 

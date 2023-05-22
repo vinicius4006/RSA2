@@ -1,80 +1,96 @@
+import math
+import random
 from random import sample
-
-
-def creates_pnumbers(size: int) -> list[int]:
-    """Cria números primos e armazena em uma lista"""
-        
-    primos = []
-    for num in range(2, size+1):
-        for i in range(2, num):
-            if num % i == 0:
-                break
-            else:
-                primos.append(num)
-    return primos                
-
-
-def product(numbers: list) -> tuple[int]:
-    """Seleciona dois números aleatórios a partir da lista no parâmetro"""
-                
-    p, q = sample(numbers, 2)
-    
-    return p, q, p*q
-
+import base64
+import json
 
 def mdc(n1: int, n2: int) -> int:
-    """Calcula o mdc usando o algoritmos de Euclides"""
-    
     while n2:
         n1, n2 = n2, n1 % n2
     return n1
 
 
-def totiente(p: int, q: int, n: int) -> int:
-    """Função de Totiente de Euler, calcula o número de coprimos
-    a um determinado número, no nosso n = p*q."""
-    
-    return (p - 1) * (q - 1)
-        
-
-def co_primos(p: int, q: int, n: int, tot: int) -> list[int]:
-    """Devolve uma lista com os coprimos"""
-
+def co_primos(z:int) -> int:
     b = 1
     coprimos = []
-    while len(coprimos) < tot:
-        
-        res = mdc(n, b)
+    while len(coprimos) < z:
+        res = mdc(z, b)
         if res == 1:
             coprimos.append(b)
-        b += 1    
-            
-    return coprimos
-            
-def private_key(e: int, tot: int) -> int:
-    """Retorna a chave D, a partir da seguinte fórmula e * d % tot == 1."""
-    
-    d = 1
+        b += 1
+
+    d = sample(coprimos, 1)
+    return int(d[0])
+
+
+def find_e(d: int, z: int) -> int:
+    e = 1
     while True:
-       
-        if e * d % tot == 1:
-        
-            return d
-        d += 1
-        
-
-        
+        if d * e % z == 1:
+            return e
+        e += 1
 
 
+def calculate_N(P, Q):
+    N = P * Q
+    return N
 
 
-lista = creates_pnumbers(100)
-p, q, n = product(lista)
-tot = totiente(p, q, n)
-coprimos = co_primos(p, q, n, tot)
-e = sample(coprimos, 1) #Seleciona um numero aleatório entre os coprimos de N. O 'e' é a chave pública
-a = private_key(e[0], tot)
-print(a)
-print(e[-1])
-print(tot)
-print(p, q, n, tot, e[0], a)
+def calculate_Z(P, Q):
+    Z = (P - 1) * (Q - 1)
+    return Z
+
+
+def is_prime(num):
+    if num <= 1:
+        return False
+    if num <= 3:
+        return True
+    if num % 2 == 0 or num % 3 == 0:
+        return False
+
+    sqrt_num = int(math.sqrt(num)) + 1
+    for divisor in range(5, sqrt_num, 6):
+        if num % divisor == 0 or num % (divisor + 2) == 0:
+            return False
+
+    return True
+
+
+def generate_prime_number(inicio, fim):
+        stop = True 
+        num_prime = 2
+        while stop:
+             new_num = random.randint(inicio, fim)
+             if is_prime(new_num):
+                  num_prime = new_num
+                  stop = False
+        return num_prime
+    
+
+def generate_keys(range_in, range_out):
+    p = generate_prime_number(range_in, range_out) 
+    q = generate_prime_number(range_in, range_out) 
+    n = calculate_N(p, q)
+    z = calculate_Z(p, q)
+    d = co_primos(z)
+    e = find_e(d, z)
+    public_key, private_key = [e, n], [d, n]
+    return public_key, private_key
+
+
+def encrypt(message, public_key):
+    e, n = public_key
+    encrypt_list = [pow(ord(char), e, n) for char in message]
+    encrypt_list = str(encrypt_list)
+    return base64.b64encode(encrypt_list.encode('UTF-8'))
+
+
+def decrypt(encrypt_list, private_key):
+    encrypt_list = list(json.loads(str(base64.b64decode(encrypt_list))[2:-1]))
+    d, n = private_key
+    message = ''.join([chr(pow(char, d, n)) for char in encrypt_list])
+    return message
+
+
+

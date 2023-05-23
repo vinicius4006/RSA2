@@ -14,7 +14,7 @@ def chat_receive(port, private_key):
         v = 0
 
         while True:
-            data, addr = sock.recvfrom(1024)
+            data, _ = sock.recvfrom(1024)
             if v == 0:
                 v = 1
                 message = data.decode('utf-8')
@@ -62,33 +62,9 @@ def chat_send(public_key, host, port, seu_nome, lock, condition):
     finally:
         sock.close()
 
-def destravar_tread(condition):
-    with condition:
-        condition.notify() 
+#  ---------------  Inicia as threads de servidor e cliente  --------------------
 
-def receber_texto(texto , lock, condition):
-    label_status.setText(texto)
-    with lock:
-        condition.wait() 
-        
-    message = message_input.text()
-    message_input.clear()
-    return message
-        
-def remover_widget():
-    button = app.focusWidget()
-    if button:
-        layout.removeWidget(button)
-        button.deleteLater()
-
-    send_button = QPushButton("Enviar")
-    send_button.clicked.connect(lambda: destravar_tread(condition))
-    layout.addWidget(send_button)
-
-    tr22 = Thread(target=principal) 
-    tr22.start()
-
-def principal():
+def client_server():
     public_key, private_key = generate_keys(100, 200)
 
     tr1 = Thread(target=chat_receive, args=(12345, private_key))
@@ -102,17 +78,46 @@ def principal():
 
     tr1.start()
     tr2.start()
-    tr1.join()
-    tr2.join()
     
-# label_status.setText(texto)
-# message_display.append(message)
-#  ---------------------------------
+#  ---------------  Destrava as treads em aguardo  --------------------
+
+def destravar_tread(condition):
+    with condition:
+        condition.notify() 
+
+#  ---------------  Captura o texto digitado no input da interface  --------------------
+
+def receber_texto(texto , lock, condition):
+    label_status.setText(texto)
+    with lock:
+        condition.wait() 
+        
+    message = message_input.text()
+    message_input.clear()
+    return message
+
+#  ---------------  Inicia a thread client_server  --------------------
+
+def remover_widget():
+    button = app.focusWidget()
+    if button:
+        layout.removeWidget(button)
+        button.deleteLater()
+
+    send_button = QPushButton("Enviar")
+    send_button.clicked.connect(lambda: destravar_tread(condition))
+    layout.addWidget(send_button)
+
+    tr3 = Thread(target=client_server) 
+    tr3.start()
+
+
+#  ---------------  Bloqueadores de threads  --------------------
 
 lock = Lock()
 condition = Condition(lock)
 
-#  ---------------------------------
+#  ---------------  App de interface grafica  -------------------
 
 app = QApplication(sys.argv)
 window = QWidget()

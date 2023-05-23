@@ -4,6 +4,7 @@ from random import sample
 import base64
 import json
 
+
 def mdc(n1: int, n2: int) -> int:
     while n2:
         n1, n2 = n2, n1 % n2
@@ -78,9 +79,9 @@ def generate_keys(range_in, range_out):
     public_key, private_key = [e, n], [d, n]
     return public_key, private_key
 
+
 def encrypt(message, public_key):
     e, n = public_key
-  
     encrypt_list = [pow(ord(char.encode("latin1")), e, n) for char in message]
     encrypt_list = str(encrypt_list)
     return base64.b64encode(encrypt_list.encode('UTF-8'))

@@ -9,6 +9,8 @@ from time import sleep
 #  ---------------  Função do servidor  --------------------
 
 def chat_receive(port, private_key):
+    """Função responsável por ficar aguardando receber a mensagem"""
+
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.bind(('', port))
@@ -45,6 +47,8 @@ def chat_receive(port, private_key):
 #  ---------------  Função do cliente  --------------------
 
 def chat_send(public_key, host, port, seu_nome, lock, condition):
+    """Função responsável por enviar a mensagem ao destino"""
+
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.sendto(str(public_key).encode('UTF-8'), (host, port))
@@ -78,6 +82,7 @@ def chat_send(public_key, host, port, seu_nome, lock, condition):
 #  ---------------  Inicia as threads de servidor e cliente  --------------------
 
 def client_server():
+    """Funcão responsável por iniciar as threads do cliente e servidor, e setar as configurações iniciais"""
 
     try:
         with open('mykeys.json', 'r') as file:
@@ -105,14 +110,19 @@ def client_server():
     
 #  ---------------  Destrava as treads em aguardo  --------------------
 
-def destravar_tread(condition):
+def destravar_thread(condition):
+    """Destrava a thread bloqueada"""
+
     with condition:
         condition.notify() 
 
 #  ---------------  Captura o texto digitado no input da interface  --------------------
 
 def receber_texto(texto , lock, condition):
+    """Faz a thread aguardar até que seja desbloqueada pela função destravar_thread() e logo opós desbloqueda faz a leitura do texto no input"""
+
     label_status.setText(texto)
+
     with lock:
         condition.wait() 
         
@@ -122,19 +132,24 @@ def receber_texto(texto , lock, condition):
 
 #  ---------------  Inicia a thread client_server  --------------------
 
-def remover_widget(send_button2):
+def start_thread_server_cliente(send_button2):
+    """Inicia a thread que inicia as outras threads cliente e servidor"""
 
     layout.removeWidget(send_button2)
     send_button2.deleteLater()
 
     send_button = QPushButton("Enviar")
-    send_button.clicked.connect(lambda: destravar_tread(condition))
+    send_button.clicked.connect(lambda: destravar_thread(condition))
     layout.addWidget(send_button)
 
-    message_input.returnPressed.connect(lambda: destravar_tread(condition)) 
+    message_input.returnPressed.connect(lambda: destravar_thread(condition)) 
 
     tr3 = Thread(target=client_server) 
     tr3.start()
+
+
+#########################  Código principal  #########################
+
 
 #  ---------------  Bloqueadores de threads  --------------------
 
@@ -161,7 +176,7 @@ message_input = QLineEdit()
 layout.addWidget(message_input)
 
 send_button = QPushButton("Iniciar")
-send_button.clicked.connect(lambda: remover_widget(send_button))
+send_button.clicked.connect(lambda: start_thread_server_cliente(send_button))
 layout.addWidget(send_button)
 
 send_button.click()
